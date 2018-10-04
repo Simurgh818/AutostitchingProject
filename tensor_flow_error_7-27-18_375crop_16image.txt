@@ -1,0 +1,2 @@
+ERROR: The 'run' command is only supported from within a workspace.
+WARNING: --batch mode is deprecated. Please instead explicitly shut down your Bazel server using the command "bazel shutdown".
