@@ -37,6 +37,9 @@ row2, col2 = img[2].shape
 print "Image 2 height =" ,row2
 print "Image 2 width = " , col2
 
+path = '/home/sinadabiri/Dropbox/Images/cell3Shifted.tif'
+directory = path.split('/')
+print(path.split('/')[-1])
 
 i = 0
 j = 0

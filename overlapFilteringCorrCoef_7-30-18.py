@@ -1,5 +1,5 @@
 import cv2
-import numpy as np 
+import numpy as np
 from matplotlib import pyplot as plt
 
 
@@ -9,10 +9,10 @@ img2 = cv2.imread('/home/sinadabiri/Dropbox/Images/cell3Shifted.tif',-1)
 
 row, col = img1.shape
 print "Image 1 height =" ,row
-print " Image 1 width = " , col 
+print " Image 1 width = " , col
 
 row2, col2 = img2.shape
-# print "Image 2 height =" ,row2, "Image 2 width = " , col2 
+# print "Image 2 height =" ,row2, "Image 2 width = " , col2
 
 i = 0
 j = 0
@@ -33,8 +33,8 @@ pixelincrement = pixelNumbersToAverage/2-1
 def PixelAveraging(img1,img2, pixelNumbersToAverage,pixelincrement):
 	# compute the average of adjacent columns
 	for i in range (row):
-		if i<(row-1): 
-			
+		if i<(row-1):
+
 			for j in range(col):
 				if j<(col-1):
 					img1_Avg[i:i+pixelincrement,j:j+pixelincrement]=np.average([img1[i:i+pixelincrement,j:j+pixelincrement]])
@@ -49,7 +49,7 @@ def PixelAveraging(img1,img2, pixelNumbersToAverage,pixelincrement):
 
 PixelAveraging(img1,img2,pixelNumbersToAverage,pixelincrement)
 
-overLapCorrCoefAvg= np.corrcoef(img1_Avg[1:(row-1),(col-1):1:-1], 
+overLapCorrCoefAvg= np.corrcoef(img1_Avg[1:(row-1),(col-1):1:-1],
 	img2_Avg[1:(row2-1),1:(col2-1)], 	rowvar=False)[:,(col-1)]
 
 
@@ -82,22 +82,22 @@ def OverLayFFT(img1,img2):
 
 	ang1 = np.angle(img1FFT2)
 	ang2 = np.angle(img2FFT2)
-	
+
 	overlayFFT_phase = np.angle(FFT2Shift1)-np.angle(FFT2Shift2)
 	print("overlay FFT phase shift", overlayFFT_phase)
 
 	img2PhaseCorrected = np.angle(FFT2Shift2) - overlayFFT_phase
-	
+
 	# ang1 = cv2.phase(img1DFT[:,:,0], img1DFT[:,:,1])
 	# ang2 = cv2.phase(img2DFT[:,:,0], img2DFT[:,:,1])
 
-	
+
 	# overlayFFT_phase2
 
 	# m,n = overlayFFT_phase2.shape
 	# print(m,n)
 
-	
+
 	# calculating the magnitute of the complex numbers of DFTShift
 	img1_magnitudeSpectrum = 20*np.log(np.abs(FFT2Shift1))
 	img2_magnitudeSpectrum = 20*np.log(np.abs(FFT2Shift2))
@@ -110,12 +110,12 @@ def OverLayFFT(img1,img2):
 	# print(overlayFFT_phase)
 
 	# Convert back to space domain and then graph the overlay diff
-	
-	
+
+
 
 	# cv2.determinant(ang1) - cv2.determinant(ang2)
-	
-	overlayFFT = [img2_magnitudeSpectrum+img2PhaseCorrected*j] 
+
+	overlayFFT = [img2_magnitudeSpectrum+img2PhaseCorrected*j]
 	print("overlay FFT: ", overlayFFT)
 
 
@@ -127,7 +127,7 @@ def OverLayFFT(img1,img2):
 	img2Corrected = np.abs(overlayiFFT)
 	print("image 2 corrected: ", img2Corrected.shape, img2Corrected[:,:])
 
-	
+
 	# x,y = cv2.polarToCart(overlayFFT_ishift[0,:,:],overlayFFT_ishift[1,:,:])
 
 	# overlayiFFT_mag = np.abs(overlayiFFT[0,:,:])
@@ -139,8 +139,8 @@ def OverLayFFT(img1,img2):
 
 	# END OF WORK IN PROGRESS
 	# ------------------------------------------------------------------------------
-	
-	# Low pass filtering: creating a mask with high value of 1 at low freq and 
+
+	# Low pass filtering: creating a mask with high value of 1 at low freq and
 	# 0 at high freq
 	freqMask1_LPF = np.zeros((row1,col1,2),np.float32)
 	freqMask2_LPF = np.zeros((row2,col2,2),np.float32)
@@ -169,14 +169,14 @@ def OverLayFFT(img1,img2):
 
 	DFTShift1[centerRow1-centerRectangle:centerRow1+centerRectangle, centerCol1-centerRectangle:centerCol1+centerRectangle]=0
 	DFTShift2[centerRow2-centerRectangle:centerRow2+centerRectangle, centerCol2-centerRectangle:centerCol2+centerRectangle]=0
-	
+
 	#inverse FFT
 	img1_HPF_iFFT_shift = np.fft.ifftshift(DFTShift1)
 	img2_HPF_iFFT_shift = np.fft.ifftshift(DFTShift2)
 
 	img1_HPF_iFFT = cv2.idft(img1_HPF_iFFT_shift)
 	img2_HPF_iFFT = cv2.idft(img2_HPF_iFFT_shift)
-	
+
 	img1_HPF_iFFT_mag = cv2.magnitude(img1_HPF_iFFT[:,:,0], img1_HPF_iFFT[:,:,1])
 	img2_HPF_iFFT_mag = cv2.magnitude(img2_HPF_iFFT[:,:,0], img2_HPF_iFFT[:,:,1])
 
@@ -189,7 +189,7 @@ OverLayFFT(img1,img2)
 
 overLapCorrCoefFFT= np.corrcoef(ang1[1:(row-1),(col-1):1:-1],
  ang2[1:(row2-1),1:(col2-1)], rowvar=False)[:,(col-1)]
-overLapCorrCoefLPF= np.corrcoef(img1_LPF_iFFT_mag[1:(row-1),(col-1):1:-1], 
+overLapCorrCoefLPF= np.corrcoef(img1_LPF_iFFT_mag[1:(row-1),(col-1):1:-1],
 	img2_LPF_iFFT_mag[1:(row2-1),1:(col2-1)], rowvar=False)[:,(col-1)]
 overLapCorrCoefHPF= np.corrcoef(img1_HPF_iFFT_mag[1:(row-1),(col-1):1:-1], img2_HPF_iFFT_mag[1:(row2-1),1:(col2-1)], rowvar=False)[:,(col-1)]
 
@@ -222,13 +222,13 @@ plt.subplot(332),plt.imshow(img1_LPF_iFFT_mag,cmap = 'gray')
 plt.title('img1 iFFT LPF'), plt.xticks([0,62,124]),plt.yticks([])
 plt.subplot(335),plt.imshow(img2_LPF_iFFT_mag,cmap = 'gray')
 plt.title('img2 iFFT LPF'), plt.xticks([0,62,124]),plt.yticks([])
-plt.subplot(338),plt.plot(overLapCorrCoefLPF), plt.title('LPF Corr Coef'), 
+plt.subplot(338),plt.plot(overLapCorrCoefLPF), plt.title('LPF Corr Coef'),
 plt.xticks(np.arange(0,249,62)), plt.yticks(np.arange(-0.8,1.3,0.2))
 
 plt.subplot(333),plt.imshow(img1_HPF_iFFT_mag)
 plt.title('img1 iFFT HPF'), plt.xticks([0,62,124]),plt.yticks([])
 plt.subplot(336),plt.imshow(img2_HPF_iFFT_mag)
 plt.title('img2 iFFT HPF'), plt.xticks([0,62,124]),plt.yticks([])
-plt.subplot(339),plt.plot(overLapCorrCoefHPF), plt.title('HPF Corr Coef'), 
+plt.subplot(339),plt.plot(overLapCorrCoefHPF), plt.title('HPF Corr Coef'),
 plt.xticks(np.arange(0,249,62)), plt.yticks(np.arange(-0.8,1.3,0.2))
 plt.show()

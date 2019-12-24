@@ -9,6 +9,8 @@ img = [0]*30
 path = ' '
 
 k = 1
+New_file_name = []
+
 # /home/sinadabiri/Dropbox/Images/cell/
 for file in os.listdir('/home/sinadabiri/Dropbox/Images/robo6_2x2_103pixelOverlap'):
     if file.endswith(".tif"):
@@ -17,9 +19,11 @@ for file in os.listdir('/home/sinadabiri/Dropbox/Images/robo6_2x2_103pixelOverla
     	path = str(os.path.join('/home/sinadabiri/Dropbox/Images/robo6_2x2_103pixelOverlap', file))
 
     	img[k] = cv2.imread(path, -1)
-    	# print (img[i])
+    	New_file_name= file +'.png'
+    	img[k]=cv2.imwrite(New_file_name,img[k])
+    	print (img[k])
     	k+=1
-        continue
+
     else:
         continue
 
@@ -28,21 +32,21 @@ for file in os.listdir('/home/sinadabiri/Dropbox/Images/robo6_2x2_103pixelOverla
 
 # robo6_2x2_103pixelOverlap/PID20180604_Robo6Test-TDP43-20180531_T5_60-0_B13_4_Epi-RFP_0.0_0_1.0.tif
 # robo6_2x2_103pixelOverlap/PID20180604_Robo6Test-TDP43-20180531_T5_60-0_B13_3_Epi-RFP_0.0_0_1.0.tif
-# img[1] = cv2.imread('/home/sinadabiri/Dropbox/Images/cell3.tif',-1)
-# img[2] = cv2.imread('/home/sinadabiri/Dropbox/Images/cell3Shifted.tif',-1)
+img[1] = cv2.imread('/home/sinadabiri/Dropbox/Images/cell3.tif',-1)
+img[2] = cv2.imread('/home/sinadabiri/Dropbox/Images/cell3Shifted.tif',-1)
 
 
-for x in xrange(1,10):
-	pass
+# for x in xrange(1,10):
+# 	pass
 
 
 k=1
 
-row, col = img[k+2].shape
+row, col = img[2].shape
 print("Image 1 height =" ,row)
 print("Image 1 width = " , col)
 
-row2, col2 = img[k+1].shape
+row2, col2 = img[1].shape
 print("Image 2 height =" ,row2)
 print("Image 2 width = " , col2)
 
